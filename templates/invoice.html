@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Invoice</title>
+    
+    <style>
+       
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        
+        .invoice-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 20px;
+        }
+        
+        .invoice-header h1 {
+            color: #4CAF50;
+            margin: 0;
+        }
+        
+        .invoice-header p {
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .items-table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .items-table tr:last-child td {
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        
+        .totals {
+            float: right;
+            width: 300px;
+            margin-top: 20px;
+        }
+        
+        .totals table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .totals td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .totals .label {
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        .totals .amount {
+            text-align: right;
+        }
+        
+        
+        .grand-total {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        
+        .back-button {
+            clear: both;
+            margin-top: 100px;
+            text-align: center;
+        }
+        
+        .back-button a {
+            display: inline-block;
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .back-button a:hover {
+            background-color: #0b7dda;
+        }
+        
+        
+        .print-button {
+            background-color: #ff9800;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .print-button:hover {
+            background-color: #e68900;
+        }
+        
+        
+        @media print {
+            .back-button, .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <h1>INVOICE</h1>
+            <p>Generated Invoice</p>
+        </div>
+        
+        <!-- Items Table -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Item Name</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Price (₹)</th>
+                    <th class="text-right">Total (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through all items and display them -->
+                {% for item in items %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.name }}</td>
+                    <td class="text-right">{{ "%.2f"|format(item.quantity) }}</td>
+                    <td class="text-right">₹{{ "%.2f"|format(item.price) }}</td>
+                    <td class="text-right">₹{{ "%.2f"|format(item.total) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Totals Section -->
+        <div class="totals">
+            <table>
+                <tr>
+                    <td class="label">Subtotal:</td>
+                    <td class="amount">₹{{ "%.2f"|format(subtotal) }}</td>
+                </tr>
+                <tr>
+                    <td class="label">GST ({{ (gst_rate * 100)|int }}%):</td>
+                    <td class="amount">₹{{ "%.2f"|format(gst_amount) }}</td>
+                </tr>
+                <tr class="grand-total">
+                    <td class="label">Grand Total:</td>
+                    <td class="amount">₹{{ "%.2f"|format(grand_total) }}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="/">← Create New Invoice</a>
+            <button class="print-button" onclick="window.print()">🖨️ Print Invoice</button>
+        </div>
+    </div>
+</body>
+</html>
